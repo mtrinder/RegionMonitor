@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:vm="clr-namespace:RegionMon.ViewModels"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="RegionMon.Views.TestMapPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:MapViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout Padding="10,0,10,0" Orientation="Vertical" HorizontalOptions="FillAndExpand" >
+            <maps:Map
+                x:Name="map"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                IsShowingUser="True" 
+                MapType="Street"
+            />
+            <StackLayout
+                Orientation="Horizontal"
+                HeightRequest="40"
+                VerticalOptions="End"
+                HorizontalOptions="FillAndExpand" >
+
+            <Button
+                Text="Clear Region"
+                Padding="2"
+                HeightRequest="25"
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="StartAndExpand"
+                WidthRequest="120"
+                Command="{Binding ClearCommand}"/>
+
+            <Button
+                Text="Set Region (current location)"
+                Padding="2"
+                HeightRequest="25"
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="EndAndExpand"
+                WidthRequest="220"
+                Command="{Binding SetCommand}"/>
+
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

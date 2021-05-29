@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RegionMon.Views.AboutPage"
+             xmlns:vm="clr-namespace:RegionMon.ViewModels"
+             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms" 
+             Title="{Binding Title}">
+    
+    <ContentPage.BindingContext>
+        <vm:AboutViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <forms:AnimationView
+            Animation="geofence.json"
+            AnimationSource="AssetOrBundle"
+            RepeatMode="Infinite"
+            AutoPlay="True"
+            HeightRequest="200"
+            VerticalOptions="Start"
+            HorizontalOptions="FillAndExpand" />
+        <Label TextColor="{StaticResource Primary}" Text="Motor Sport Australia" FontSize="Large" HorizontalTextAlignment="Center" VerticalOptions="Start" />
+        <Label TextColor="{StaticResource Primary}" Text="Region Monitor Test Harness" FontSize="Small" HorizontalTextAlignment="Center" VerticalOptions="Start" />
+        <forms:AnimationView
+            x:Name="CarAnimation"
+            Animation="racecar.json"
+            AnimationSource="AssetOrBundle"
+            RepeatMode="Restart"
+            AutoPlay="True"
+            HeightRequest="300"
+            VerticalOptions="StartAndExpand"
+            HorizontalOptions="FillAndExpand" />
+    </StackLayout>
+</ContentPage>

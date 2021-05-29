@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    x:Class="RegionMon.Views.RegionPopup">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation PositionIn="Center" PositionOut="Center" ScaleIn="0.5" ScaleOut="1.5" DurationIn="500" EasingIn="CubicIn" />
+    </pages:PopupPage.Animation>
+
+    <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+        <AbsoluteLayout>
+            <Frame x:Name="FrameContainer" Margin="15" HorizontalOptions="Center" HeightRequest="100" WidthRequest="250" BackgroundColor="White">
+                <StackLayout IsClippedToBounds="True" Spacing="3">
+                    <Label Text="Monitoring your region now!" FontSize="Medium" TextColor="Black" HorizontalOptions="Center" Margin="10,5,0,0" />
+                    <ContentView VerticalOptions="End" HorizontalOptions="Center">
+                        <Button Clicked="Button_Clicked" Text="Done" TextColor="White" WidthRequest="100" Margin="0,20,0,0" HeightRequest="30" FontSize="14" BorderWidth="1" BorderColor="Navy" ></Button>
+                    </ContentView>
+                </StackLayout>
+            </Frame>
+        </AbsoluteLayout>
+    </ScrollView>
+</pages:PopupPage>

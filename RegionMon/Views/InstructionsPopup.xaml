@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:RegionMon"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    x:Class="RegionMon.Views.InstructionsPopup">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation PositionIn="Center" PositionOut="Center" ScaleIn="0.5" ScaleOut="1.5" DurationIn="500" EasingIn="CubicIn" />
+    </pages:PopupPage.Animation>
+
+    <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+        <AbsoluteLayout>
+            <Frame x:Name="FrameContainer" Margin="15" HorizontalOptions="Center" HeightRequest="360" WidthRequest="250" BackgroundColor="White">
+                <StackLayout IsClippedToBounds="True" Spacing="3">
+                    <StackLayout Orientation="Horizontal" Spacing="0">
+                        <Image WidthRequest="25" Aspect="AspectFit" Source="{local:ImageResource RegionMon.Images.location.png}" />
+                        <StackLayout Orientation="Vertical" Spacing="0">
+                            <Label Text="INSTRUCTIONS" FontSize="Large" TextColor="Black" HorizontalOptions="Center" Margin="10,5,0,0" />
+                        </StackLayout>
+                    </StackLayout>
+                    <ContentView BackgroundColor="Black" Margin="5,0,5,0" HeightRequest="1" />
+
+                    <Grid Margin="10,10,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="80" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>                        
+
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Use the map and move to a place where you want to create a circular region to monitor. Press the Set Region button."
+                               Opacity="0.75" TextColor="Navy" FontSize="Micro" LineBreakMode="WordWrap" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="The region created will have a 500 metre radius. This is hardcoded for now. As you move in and out of the region you will get a triggered notification on screen."
+                               Opacity="0.75" TextColor="Navy" FontSize="Micro" LineBreakMode="WordWrap" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="End" HorizontalTextAlignment="Center" />
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="The final test is to terminate the App and then move in and out of the region. You will receive local 'push' notifications."
+                               Opacity="0.75" TextColor="Navy" FontSize="Micro" LineBreakMode="WordWrap" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="End" HorizontalTextAlignment="Center" />
+                    </Grid>
+
+                    <ContentView HorizontalOptions="Center">
+                        <Button Clicked="Button_Clicked" Text="Done" TextColor="White" WidthRequest="100" Margin="0,20,0,0" HeightRequest="30" FontSize="14" BorderWidth="1" BorderColor="Navy" ></Button>
+                    </ContentView>
+
+                </StackLayout>
+            </Frame>
+        </AbsoluteLayout>
+    </ScrollView>
+</pages:PopupPage>
