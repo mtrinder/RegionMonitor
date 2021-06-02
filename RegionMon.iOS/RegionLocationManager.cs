@@ -15,44 +15,61 @@ namespace RegionMon.iOS
         const string Message = "To ensure you get your Welcome Message on race day, go to settings and turn on {0}";
 
         bool started;
-        double currentLatitude, currentLongitude;
+        double _currentLatitude, _currentLongitude;
 
-        protected CLLocationManager locationManager;
+        protected CLLocationManager _locationManager;
 
         public RegionLocationManager()
         {
-            locationManager = new CLLocationManager
+            Preferences.Set("LastInEvent", default(DateTime));
+            Preferences.Set("LastOutEvent", default(DateTime));
+
+            _locationManager = new CLLocationManager
             {
                 PausesLocationUpdatesAutomatically = false
             };
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
             {
-                locationManager.AllowsBackgroundLocationUpdates = true;
+                _locationManager.AllowsBackgroundLocationUpdates = true;
             }
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
             {
-                locationManager.RequestAlwaysAuthorization();
+                _locationManager.RequestAlwaysAuthorization();
             }
 
-            locationManager.DidStartMonitoringForRegion += DidStartMonitoringRegion;
-            locationManager.RegionEntered += RegionEntered;
-            locationManager.RegionLeft += RegionLeft;
+            _locationManager.DidStartMonitoringForRegion += DidStartMonitoringRegion;
+            _locationManager.RegionEntered += RegionEntered;
+            _locationManager.RegionLeft += RegionLeft;
         }
 
         void RegionLeft(object sender, CLRegionEventArgs e)
         {
-            MessagingCenter.Send<IRegionMonitor>(this, "regionLeft");
+            var timeStamp = Preferences.Get("LastOutEvent", default(DateTime));
 
-            ShowRegionNotificationWithMessage("You have left the region");
+            if (timeStamp == default || DateTime.Now - timeStamp > TimeSpan.FromSeconds(20))
+            {
+                MessagingCenter.Send<IRegionMonitor>(this, "regionLeft");
+
+                ShowRegionNotificationWithMessage("You have left the region");
+
+                Preferences.Set("LastOutEvent", DateTime.Now);
+            }
         }
 
         void RegionEntered(object sender, CLRegionEventArgs e)
         {
-            MessagingCenter.Send<IRegionMonitor>(this, "regionEntered");
+            var timeStamp = Preferences.Get("LastInEvent", default(DateTime));
 
-            ShowRegionNotificationWithMessage("You have entered the region");
+            if (timeStamp == default || DateTime.Now - timeStamp > TimeSpan.FromSeconds(20))
+            {
+                MessagingCenter.Send<IRegionMonitor>(this, "regionEntered");
+
+                ShowRegionNotificationWithMessage("You have entered the region");
+
+                Preferences.Set("LastInEvent", DateTime.Now);
+            }
         }
 
         void DidStartMonitoringRegion(object sender, CLRegionEventArgs e)
@@ -78,18 +95,18 @@ namespace RegionMon.iOS
         {
             if (!started)
             {
-                locationManager.LocationsUpdated += (object sender, CLLocationsUpdatedEventArgs e) =>
+                _locationManager.LocationsUpdated += (object sender, CLLocationsUpdatedEventArgs e) =>
                 {
                     if (e.Locations.Length > 0)
                     {
-                        currentLatitude = e.Locations[0].Coordinate.Latitude;
-                        currentLongitude = e.Locations[0].Coordinate.Longitude;
+                        _currentLatitude = e.Locations[0].Coordinate.Latitude;
+                        _currentLongitude = e.Locations[0].Coordinate.Longitude;
                     }
 
                     MessagingCenter.Send<IRegionMonitor>(this, "locationUpdated");
                 };
 
-                locationManager.StartUpdatingLocation();
+                _locationManager.StartUpdatingLocation();
             }
         }
 
@@ -166,7 +183,9 @@ namespace RegionMon.iOS
 
                 var circularRegion = new CLCircularRegion(new CLLocationCoordinate2D(latitude, longitude), radius, regionId);
 
-                locationManager.StopMonitoring(circularRegion);
+                _locationManager.StopMonitoring(circularRegion);
+
+                Preferences.Remove("CurrentRegion");
             }
         }
 
@@ -180,9 +199,9 @@ namespace RegionMon.iOS
         /// <returns></returns>
         public RegionStatus RegisterLocationWithRadius(double latitude, double longitude, double radius)
         {
-            if (radius > locationManager.MaximumRegionMonitoringDistance)
+            if (radius > _locationManager.MaximumRegionMonitoringDistance)
             {
-                radius = locationManager.MaximumRegionMonitoringDistance;
+                radius = _locationManager.MaximumRegionMonitoringDistance;
             }
 
             try
@@ -191,9 +210,9 @@ namespace RegionMon.iOS
 
                 var circularRegion = new CLCircularRegion(new CLLocationCoordinate2D(latitude, longitude), radius, id);
 
-                if (!locationManager.MonitoredRegions.Contains(circularRegion))
+                if (!_locationManager.MonitoredRegions.Contains(circularRegion))
                 {
-                    locationManager.StartMonitoring(circularRegion);
+                    _locationManager.StartMonitoring(circularRegion);
                 }
                 else
                 {
@@ -217,7 +236,7 @@ namespace RegionMon.iOS
         /// <returns></returns>
         public Coordinate GetUserCoordinate()
         {
-            return new Coordinate { Latitude = currentLatitude, Longitude = currentLongitude };
+            return new Coordinate { Latitude = _currentLatitude, Longitude = _currentLongitude };
         }
     }
 }

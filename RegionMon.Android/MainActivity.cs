@@ -7,6 +7,7 @@ using Android.OS;
 using Android;
 using Xamarin.Forms;
 using RegionMon.Services;
+using System.Threading.Tasks;
 
 namespace RegionMon.Droid
 {
@@ -40,15 +41,24 @@ namespace RegionMon.Droid
             // Create a notification channel to show local Notifications
             CreateNotificationChannel();
 
-            // The region monitor 
-            Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>();
-            Manager.StartLocationUpdates(this);
-
-            // We need to have this service running in foreground so that
-            // when the app moves into the background we continue to get region (geofence) updates
-            StartService(new Android.Content.Intent(this, typeof(LocationService)));
-
             LoadApplication(new App());
+
+            Task.Delay(2000).ContinueWith(t =>
+            {
+                Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>(); // Create Region Manager
+
+                t.ContinueWith(t2 => {
+                    Task.Delay(2000).ContinueWith(t3 => {
+                        Device.BeginInvokeOnMainThread(() => Manager.StartLocationUpdates(this)); // Start getting locations
+
+                        // We need to have this service running in foreground so that
+                        // when the app moves into the background we continue to get region (geofence) updates
+                        t3.ContinueWith(t4 => Task.Delay(2000).ContinueWith(
+                            t5 => Device.BeginInvokeOnMainThread(() => StartService(new Android.Content.Intent(this, typeof(LocationService))))));
+                    });
+                });
+            });
+
         }
 
         void CreateNotificationChannel()

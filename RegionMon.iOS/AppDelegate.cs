@@ -70,7 +70,11 @@ namespace RegionMon.iOS
         [Export("applicationDidEnterBackground:")]
         public override void DidEnterBackground(UIApplication application)
         {
-            //Preferences.Set("time", DateTime.Now);
+        }
+
+        [Export("applicationWillTerminate:")]
+        public override void WillTerminate(UIApplication application)
+        {
         }
     }
 }
