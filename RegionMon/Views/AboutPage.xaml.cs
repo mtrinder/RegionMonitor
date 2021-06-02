@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using RegionMon.Services;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace RegionMon.Views
 {
@@ -11,9 +7,16 @@ namespace RegionMon.Views
         public AboutPage()
         {
             InitializeComponent();
+        }
 
-            MessagingCenter.Subscribe<Application>(this, "refresh", (sender) => {
-                CarAnimation.PlayAnimation();
+        protected override void OnAppearing()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (CarAnimation != null)
+                {
+                    CarAnimation.PlayAnimation();
+                }
             });
         }
     }

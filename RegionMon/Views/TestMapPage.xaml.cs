@@ -41,15 +41,19 @@ namespace RegionMon.Views
             // After 2 seconds the location will continue to be saved but the map will stop zooming
             MessagingCenter.Subscribe<IRegionMonitor>(this, "locationUpdated", rm =>
             {
-                var coord = DependencyService.Get<IRegionMonitor>().GetUserCoordinate();
-                if (count++ < 10)
+                var regionMonitor = DependencyService.Get<IRegionMonitor>();
+                if (regionMonitor != null)
                 {
-                    map.MoveToRegion(
-                        MapSpan.FromCenterAndRadius(
-                            new Position(coord.Latitude, coord.Longitude), Distance.FromKilometers(2)));
-                }
+                    var coord = regionMonitor.GetUserCoordinate();
+                    //if (count++ < 3)
+                    {
+                        map.MoveToRegion(
+                            MapSpan.FromCenterAndRadius(
+                                new Position(coord.Latitude, coord.Longitude), Distance.FromKilometers(2)));
+                    }
 
-                vm.SetLocation(coord.Latitude, coord.Longitude);
+                    vm.SetLocation(coord.Latitude, coord.Longitude);
+                }
             });
         }
 

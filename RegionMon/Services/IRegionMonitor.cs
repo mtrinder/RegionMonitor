@@ -20,7 +20,6 @@ namespace RegionMon.Services
     public interface IRegionMonitor
     {
         void ClearRegion();
-        void ClearRegion(double latitude, double longitude, double radius);
         RegionStatus RegisterLocationWithRadius(double latitude, double longitude, double radius);
         Coordinate GetUserCoordinate();
     }

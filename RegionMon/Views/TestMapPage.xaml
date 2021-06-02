@@ -34,16 +34,16 @@
                 HeightRequest="25"
                 VerticalOptions="StartAndExpand"
                 HorizontalOptions="StartAndExpand"
-                WidthRequest="120"
+                WidthRequest="150"
                 Command="{Binding ClearCommand}"/>
 
             <Button
-                Text="Set Region (current location)"
+                Text="Set Region"
                 Padding="2"
                 HeightRequest="25"
                 VerticalOptions="StartAndExpand"
                 HorizontalOptions="EndAndExpand"
-                WidthRequest="220"
+                WidthRequest="150"
                 Command="{Binding SetCommand}"/>
 
             </StackLayout>

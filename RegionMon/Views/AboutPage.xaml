@@ -22,7 +22,7 @@
             AnimationSource="AssetOrBundle"
             RepeatMode="Infinite"
             AutoPlay="True"
-            HeightRequest="200"
+            HeightRequest="150"
             VerticalOptions="Start"
             HorizontalOptions="FillAndExpand" />
         <Label TextColor="{StaticResource Primary}" Text="Motor Sport Australia" FontSize="Large" HorizontalTextAlignment="Center" VerticalOptions="Start" />

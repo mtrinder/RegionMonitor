@@ -1,8 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using RegionMon.Services;
-using RegionMon.Views;
+﻿using Xamarin.Forms;
 
 namespace RegionMon
 {
@@ -26,7 +22,6 @@ namespace RegionMon
 
         protected override void OnResume()
         {
-            MessagingCenter.Send<Application>(this, "refresh");
         }
     }
 }

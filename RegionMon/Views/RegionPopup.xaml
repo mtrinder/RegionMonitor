@@ -16,7 +16,7 @@
                 <StackLayout IsClippedToBounds="True" Spacing="3">
                     <Label Text="Monitoring your region now!" FontSize="Medium" TextColor="Black" HorizontalOptions="Center" Margin="10,5,0,0" />
                     <ContentView VerticalOptions="End" HorizontalOptions="Center">
-                        <Button Clicked="Button_Clicked" Text="Done" TextColor="White" WidthRequest="100" Margin="0,20,0,0" HeightRequest="30" FontSize="14" BorderWidth="1" BorderColor="Navy" ></Button>
+                        <Button Clicked="Button_Clicked" Text="OK" TextColor="White" WidthRequest="100" Margin="0,20,0,0" HeightRequest="35" FontSize="12" BorderWidth="1" BorderColor="Navy" ></Button>
                     </ContentView>
                 </StackLayout>
             </Frame>

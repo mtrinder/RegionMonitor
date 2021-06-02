@@ -28,4 +28,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Images\location.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>

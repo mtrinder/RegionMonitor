@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using RegionMon.ViewModels;
-using RegionMon.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

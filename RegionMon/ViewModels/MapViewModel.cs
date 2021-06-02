@@ -21,15 +21,20 @@ namespace RegionMon.ViewModels
         private void OnSetClicked(object obj)
         {
             var regionMonitor = DependencyService.Get<IRegionMonitor>();
-
-            regionMonitor.ClearRegion();
-            regionMonitor.RegisterLocationWithRadius(latitude, longitude, 500); // 500 metre radius
+            if (regionMonitor != null)
+            {
+                regionMonitor.ClearRegion();
+                regionMonitor.RegisterLocationWithRadius(latitude, longitude, 500); // 500 metre radius
+            }
         }
 
         private void OnClearClicked(object obj)
         {
             var regionMonitor = DependencyService.Get<IRegionMonitor>();
-            regionMonitor.ClearRegion();
+            if (regionMonitor != null)
+            {
+                regionMonitor.ClearRegion();
+            }
         }
 
         public void SetLocation(double lat, double lon)

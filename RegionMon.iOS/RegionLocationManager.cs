@@ -6,19 +6,20 @@ using UIKit;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(RegionMon.iOS.LocationManager))]
+[assembly: Dependency(typeof(RegionMon.iOS.RegionLocationManager))]
 namespace RegionMon.iOS
 {
-    public class LocationManager : IRegionMonitor
+    public class RegionLocationManager : IRegionMonitor
     {
         const string Title = "{0} is Off";
         const string Message = "To ensure you get your Welcome Message on race day, go to settings and turn on {0}";
 
+        bool started;
         double currentLatitude, currentLongitude;
 
         protected CLLocationManager locationManager;
 
-        public LocationManager()
+        public RegionLocationManager()
         {
             locationManager = new CLLocationManager
             {
@@ -73,6 +74,25 @@ namespace RegionMon.iOS
             UIApplication.SharedApplication.ScheduleLocalNotification(notification);
         }
 
+        void StartLocationUpdates()
+        {
+            if (!started)
+            {
+                locationManager.LocationsUpdated += (object sender, CLLocationsUpdatedEventArgs e) =>
+                {
+                    if (e.Locations.Length > 0)
+                    {
+                        currentLatitude = e.Locations[0].Coordinate.Latitude;
+                        currentLongitude = e.Locations[0].Coordinate.Longitude;
+                    }
+
+                    MessagingCenter.Send<IRegionMonitor>(this, "locationUpdated");
+                };
+
+                locationManager.StartUpdatingLocation();
+            }
+        }
+
         /// <summary>
         /// Check that we can get position and do region monitoring
         /// </summary>
@@ -112,8 +132,8 @@ namespace RegionMon.iOS
                     }
                     else
                     {
-                        StartLocationUpdates(appDelegate);
-                        return true;
+                        StartLocationUpdates();
+                        return started = true;
                     }
                 }
                 else
@@ -127,26 +147,6 @@ namespace RegionMon.iOS
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Start caching the current position
-        /// </summary>
-        /// <param name="appDelegate"></param>
-        public void StartLocationUpdates(AppDelegate appDelegate)
-        {
-            locationManager.LocationsUpdated += (object sender, CLLocationsUpdatedEventArgs e) =>
-            {
-                if (e.Locations.Length > 0)
-                {
-                    currentLatitude = e.Locations[0].Coordinate.Latitude;
-                    currentLongitude = e.Locations[0].Coordinate.Longitude;
-                }
-
-                MessagingCenter.Send<IRegionMonitor>(this, "locationUpdated");
-            };
-
-            locationManager.StartUpdatingLocation();
         }
 
         /// <summary>
@@ -168,21 +168,6 @@ namespace RegionMon.iOS
 
                 locationManager.StopMonitoring(circularRegion);
             }
-        }
-
-        /// <summary>
-        /// Clear the region with variables
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <param name="radius"></param>
-        public void ClearRegion(double latitude, double longitude, double radius)
-        {
-            var id = string.Format("{0}:{1}:{2}", latitude, longitude, radius);
-
-            var circularRegion = new CLCircularRegion(new CLLocationCoordinate2D(latitude, longitude), radius, id);
-
-            locationManager.StopMonitoring(circularRegion);
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace RegionMon.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        public LocationManager Manager { get; set; }
+        public RegionLocationManager Manager { get; set; }
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -28,7 +28,7 @@ namespace RegionMon.iOS
 
                 t.ContinueWith(t2 => {
                     Task.Delay(3000).ContinueWith(t3 => {
-                        InvokeOnMainThread(() => Manager = (LocationManager)DependencyService.Get<IRegionMonitor>()); // Create & Ask for locations permission
+                        InvokeOnMainThread(() => Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>()); // Create & Ask for locations permission
 
                         t3.ContinueWith(t4 => Task.Delay(5000).ContinueWith(
                             t5 => InvokeOnMainThread(() => Manager.LocationAvailabilityChecks(this, app)))); // Do all availability checks
@@ -49,10 +49,7 @@ namespace RegionMon.iOS
                     InvokeOnMainThread(() =>
                     {
                         // Do all availability checks when returning from background in case the user changed something
-                        if (Manager.LocationAvailabilityChecks(this, application))
-                        {
-                            Manager.StartLocationUpdates(this);
-                        }
+                        Manager.LocationAvailabilityChecks(this, application);
                     });
                 });
             }

@@ -41,11 +41,5 @@ namespace RegionMon.iOS
                 app.RegisterUserNotificationSettings(notificationSettings);
             }
         }
-
-        public static void StartLocationManager(this AppDelegate appDelegate)
-        {
-            //appDelegate.Manager.LocationUpdated += HandleLocationChanged;
-            //appDelegate.Manager.StartLocationUpdates();
-        }
     }
 }
