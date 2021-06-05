@@ -24,14 +24,17 @@ namespace RegionMon.iOS
 
             Task.Delay(3000).ContinueWith(t =>
             {
-                InvokeOnMainThread(() => this.RegisterNotifications(app)); // Show Notifications Message
+                // Show Notifications Message
+                InvokeOnMainThread(() => this.RegisterNotifications(app));
 
                 t.ContinueWith(t2 => {
                     Task.Delay(3000).ContinueWith(t3 => {
-                        InvokeOnMainThread(() => Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>()); // Create & Ask for locations permission
+
+                        // Create Region Manager Dependency Service
+                        InvokeOnMainThread(() => Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>());
 
                         t3.ContinueWith(t4 => Task.Delay(5000).ContinueWith(
-                            t5 => InvokeOnMainThread(() => Manager.LocationAvailabilityChecks(this, app)))); // Do all availability checks
+                            t5 => InvokeOnMainThread(() => this.LocationAvailabilityChecks(app)))); // Do all availability checks
                     });
                 });
             });
@@ -49,7 +52,7 @@ namespace RegionMon.iOS
                     InvokeOnMainThread(() =>
                     {
                         // Do all availability checks when returning from background in case the user changed something
-                        Manager.LocationAvailabilityChecks(this, application);
+                        this.LocationAvailabilityChecks(application);
                     });
                 });
             }

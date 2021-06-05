@@ -39,6 +39,7 @@ namespace RegionMon.Droid
                 return _geofencePendingIntent;
             }
 
+            // RegionTransitionReceiver (BroadcastReceiver) gets the geofence triggers
             var intent = new Intent(_activity, typeof(RegionTransitionReceiver));
 
             return _geofencePendingIntent = PendingIntent.GetBroadcast(_activity, 0, intent, PendingIntentFlags.UpdateCurrent);
@@ -71,7 +72,7 @@ namespace RegionMon.Droid
         }
 
         /// <summary>
-        /// Start caching the current position
+        /// Start caching the current position with the FusedLocationProvider
         /// </summary>
         /// <param name="activity"></param>
         [Obsolete]
@@ -110,7 +111,7 @@ namespace RegionMon.Droid
         }
 
         /// <summary>
-        /// Start monitoring the region.
+        /// Start monitoring the region with the GeofencingClient
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>

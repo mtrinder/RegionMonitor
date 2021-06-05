@@ -45,7 +45,8 @@ namespace RegionMon.Droid
 
             Task.Delay(2000).ContinueWith(t =>
             {
-                Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>(); // Create Region Manager
+                // Create Region Manager Dependency Service
+                Manager = (RegionLocationManager)DependencyService.Get<IRegionMonitor>();
 
                 t.ContinueWith(t2 => {
                     Task.Delay(2000).ContinueWith(t3 => {
@@ -81,11 +82,11 @@ namespace RegionMon.Droid
             {
                 if ((grantResults.Length == 1) && (grantResults[0] == (int)Permission.Granted))
                 {
-                    // Permissions granted - display a message.
+                    // Permissions granted
                 }
                 else
                 {
-                    // Permissions denied - display a message.
+                    // Permissions denied
                 }
             }
             else
@@ -108,7 +109,7 @@ namespace RegionMon.Droid
                 }
                 else
                 {
-                    // Permissions already granted - display a message.
+                    // Permissions already granted
                 }
             }
         }

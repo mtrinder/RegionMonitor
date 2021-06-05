@@ -11,9 +11,6 @@ namespace RegionMon.iOS
 {
     public class RegionLocationManager : IRegionMonitor
     {
-        const string Title = "{0} is Off";
-        const string Message = "To ensure you get your Welcome Message on race day, go to settings and turn on {0}";
-
         bool started;
         double _currentLatitude, _currentLongitude;
 
@@ -91,10 +88,12 @@ namespace RegionMon.iOS
             UIApplication.SharedApplication.ScheduleLocalNotification(notification);
         }
 
-        void StartLocationUpdates()
+        public void StartLocationUpdates()
         {
             if (!started)
             {
+                started = true;
+
                 _locationManager.LocationsUpdated += (object sender, CLLocationsUpdatedEventArgs e) =>
                 {
                     if (e.Locations.Length > 0)
@@ -108,62 +107,6 @@ namespace RegionMon.iOS
 
                 _locationManager.StartUpdatingLocation();
             }
-        }
-
-        /// <summary>
-        /// Check that we can get position and do region monitoring
-        /// </summary>
-        /// <param name="appDelegate"></param>
-        /// <param name="application"></param>
-        /// <returns></returns>
-        public bool LocationAvailabilityChecks(AppDelegate appDelegate, UIApplication application)
-        {
-            var inet = Connectivity.NetworkAccess;
-            if (inet == NetworkAccess.None || inet == NetworkAccess.Unknown)
-            {
-                appDelegate.ShowMessage(string.Format(Title, "The Internet"), string.Format(Message, "the internet"));
-                return false;
-            }
-
-            if (CLLocationManager.LocationServicesEnabled)
-            {
-                if (application.BackgroundRefreshStatus == UIBackgroundRefreshStatus.Available)
-                {
-                    if (!CLLocationManager.IsMonitoringAvailable(typeof(CLCircularRegion)))
-                    {
-                        appDelegate.ShowMessage(string.Format(Title, "Tracking Unavailable"), "Your device is not supported. Do a manual check-in when you reach the track.");
-                        return false;
-                    }
-
-                    if (CLLocationManager.Status == CLAuthorizationStatus.Denied ||
-                        CLLocationManager.Status == CLAuthorizationStatus.NotDetermined ||
-                        CLLocationManager.Status == CLAuthorizationStatus.Restricted)
-                    {
-                        appDelegate.ShowMessage(string.Format(Title, "Location Services"), "To ensure you get your Welcome Message on race day, authorize this app to use your location 'Always'");
-                        return false;
-                    }
-
-                    if (!CLLocationManager.RegionMonitoringAvailable)
-                    {
-                        appDelegate.ShowMessage(string.Format(Title, "Your Location"), "We can't determine your current location. Do a manual check-in when you reach the track.");
-                    }
-                    else
-                    {
-                        StartLocationUpdates();
-                        return started = true;
-                    }
-                }
-                else
-                {
-                    appDelegate.ShowMessage(string.Format(Title, "Background Refresh"), string.Format(Message, "Background Refresh"));
-                }
-            }
-            else
-            {
-                appDelegate.ShowMessage(string.Format(Title, "Location Services"), string.Format(Message, "Location Services"));
-            }
-
-            return false;
         }
 
         /// <summary>
